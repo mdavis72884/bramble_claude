@@ -1,0 +1,153 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Calm, modern-classic palette */
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Libre Baskerville', serif;
+  
+  --radius: 0.5rem;
+}
+
+:root {
+  /* Warm, paper-like neutral base */
+  --background: 40 10% 98%; /* Warm off-white */
+  --foreground: 20 5% 15%; /* Soft charcoal */
+
+  /* White cards with subtle borders */
+  --card: 0 0% 100%;
+  --card-foreground: 20 5% 15%;
+  
+  --popover: 0 0% 100%;
+  --popover-foreground: 20 5% 15%;
+
+  /* Elegant primary - Deep Forest Green/Slate */
+  --primary: 150 15% 25%; 
+  --primary-foreground: 40 10% 98%;
+
+  /* Soft secondary */
+  --secondary: 40 10% 94%;
+  --secondary-foreground: 20 5% 20%;
+
+  /* Muted text */
+  --muted: 40 10% 94%;
+  --muted-foreground: 25 5% 45%;
+
+  /* Subtle accent */
+  --accent: 40 10% 94%;
+  --accent-foreground: 20 5% 15%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+
+  /* Soft borders */
+  --border: 30 10% 88%;
+  --input: 30 10% 88%;
+  --ring: 150 15% 25%;
+
+  /* Sidebar - Slightly distinct from background */
+  --sidebar: 40 10% 97%;
+  --sidebar-foreground: 20 5% 20%;
+  --sidebar-primary: 150 15% 25%;
+  --sidebar-primary-foreground: 40 10% 98%;
+  --sidebar-accent: 40 10% 92%;
+  --sidebar-accent-foreground: 20 5% 15%;
+  --sidebar-border: 30 10% 88%;
+  --sidebar-ring: 150 15% 25%;
+}
+
+.dark {
+  /* Reversed for dark mode - Deep warm charcoal */
+  --background: 20 5% 10%;
+  --foreground: 40 10% 95%;
+
+  --card: 20 5% 13%;
+  --card-foreground: 40 10% 95%;
+
+  --popover: 20 5% 13%;
+  --popover-foreground: 40 10% 95%;
+
+  --primary: 150 10% 80%; /* Lighter sage for dark mode */
+  --primary-foreground: 20 5% 10%;
+
+  --secondary: 20 5% 18%;
+  --secondary-foreground: 40 10% 95%;
+
+  --muted: 20 5% 18%;
+  --muted-foreground: 25 5% 65%;
+
+  --accent: 20 5% 18%;
+  --accent-foreground: 40 10% 95%;
+
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 40 10% 95%;
+
+  --border: 20 5% 20%;
+  --input: 20 5% 20%;
+  --ring: 150 10% 80%;
+
+  --sidebar: 20 5% 12%;
+  --sidebar-foreground: 40 10% 95%;
+  --sidebar-primary: 150 10% 80%;
+  --sidebar-primary-foreground: 20 5% 10%;
+  --sidebar-accent: 20 5% 18%;
+  --sidebar-accent-foreground: 40 10% 95%;
+  --sidebar-border: 20 5% 20%;
+  --sidebar-ring: 150 10% 80%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif text-foreground font-medium tracking-tight;
+  }
+}
