@@ -1,0 +1,68 @@
+Project Name: Bramble
+
+Bramble is a multi-tenant SaaS platform for homeschool co-ops. This prompt covers the complete backend and Bramble Console UI.
+
+Focus areas:
+- Backend: Node.js + TypeScript, PostgreSQL, Prisma, REST, JWT auth, Stripe integration, Zod validation, RBAC, audit logs, tenant scoping
+- Frontend: Next.js + TypeScript for Bramble Console UI
+- Stripe: Bramble is merchant of record; splits with co-ops/instructors via ledger
+- Every model must be scoped to tenant_id unless explicitly global
+- Roles: Bramble Operator (platform), Co-op Admin, Instructor, Family
+
+Seed data:
+- 1 Bramble Operator
+- 1 Tenant (co-op)
+- 1 Co-op Admin
+- 1 Instructor
+- 1 Family with 2 children
+- 1 published class with sessions
+- 1 published event
+- Main co-op chat + class chat
+
+Phase 1.5 Deliverables:
+1. Full Prisma schema with all models (including classes, events, children, users, communications, ledger, payouts, chat)
+2. Migrations + seed script
+3. Auth routes: register, login, refresh, logout
+4. Middleware: JWT auth, RBAC, tenant scoping, audit logger
+5. Platform REST API routes:
+   - GET/POST/PATCH tenants
+   - Fee rules (bramble_fee_rules, instructor_payout_rules, coop_revenue_rules)
+   - Payments: transactions, payouts, mark as paid
+   - Audit logs: query by tenant
+   - Email templates (global defaults: tenant_id null)
+   - Email logs (filter by tenant, type, status)
+   - Trigger targeted messages to a tenant
+   - Apply “starter pack” to new tenants
+   - Directory visibility toggle per tenant
+6. Email system:
+   - email_templates
+   - email_logs
+   - email_automations (skeleton)
+   - targeted_messages
+   - audience_segments
+   - All actual sends should use a “log only” provider adapter
+7. Payments:
+   - Stripe config (merchant of record setup)
+   - Order + payment intent creation
+   - Payment webhook handler
+   - Ledger entry generator (gross, bramble_fee, instructor_earning, coop_earning)
+8. Cron job:
+   - Weekly payout scheduler: creates payout records per entity
+   - Manual payout marking endpoint
+9. UI (Bramble Console only):
+   - Calm, modern-classic, editorial tone
+   - Neutral colors, soft layout, serif/sans typography pairing
+   - Views for:
+     - Tenants list + detail
+     - Fee rule management
+     - Transactions + payouts
+     - Audit log viewer
+     - Email log viewer
+     - Email template editor (global)
+     - Targeted message sender
+     - Directory controls
+
+Rules:
+- Do not build family, instructor, or tenant admin UIs yet
+- Do not implement event/class creation UIs yet
+- Only build what's listed in this prompt

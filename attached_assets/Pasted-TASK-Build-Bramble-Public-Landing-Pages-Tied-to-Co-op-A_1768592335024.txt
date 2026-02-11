@@ -1,0 +1,128 @@
+TASK: Build Bramble Public Landing Pages (Tied to Co-op Application Flow)
+
+GOAL:
+Create the public-facing Bramble website — the entry point for new co-op organizers to discover Bramble, understand what it is, and apply to start a co-op.
+
+This ties directly into the **Co-op Application & Approval Flow** built in the last prompt.
+The page at `/start` or `/apply` must route into that flow.
+
+--------------------------------------------------
+PAGES TO BUILD
+--------------------------------------------------
+
+1) 🌐 Bramble Landing Page
+Path: `/`
+
+Purpose:
+- Calm, clear homepage for Bramble
+- Describes what Bramble is and who it’s for
+- Includes CTA to start a co-op
+
+Content Sections:
+- Hero: “The invisible operating system for homeschool co-ops.”
+- Subhead: “Bramble powers co-ops behind the scenes — quietly, clearly, without replacing what makes them unique.”
+- How it works (simple 3-step visual)
+- Who it’s for (co-op admins, families, instructors)
+- Key features: approvals, classes, curriculum, communication, payments
+- CTA: “Start a Co-op” → `/start`
+- CTA: “Browse Co-ops” → `/directory`
+- Footer: About | Privacy | Terms
+
+Design Notes:
+- Calm, neutral colors
+- Editorial layout — not corporate SaaS
+- Bramble brand should feel like infrastructure (not a product users “join”)
+
+--------------------------------------------------
+
+2) 📝 Start a Co-op Page
+Path: `/start` (or `/apply`)
+
+Purpose:
+- Kicks off the co-op application flow (see previous prompt)
+- Public, no login required
+
+Fields:
+- coopName (required)
+- location (city/state)
+- description
+- estimatedSize
+- applicantName (required)
+- applicantEmail (required)
+- applicantPhone (optional)
+- whyStartingCoop (optional)
+- logoUpload (optional)
+
+Behavior:
+- Soft validation on coop name and email (prevent duplicates)
+- Submits to CoopApplication DB
+- Shows confirmation screen
+- Sends confirmation email
+
+🔗 NOTE: This page **feeds into the operator review flow** from the previous task prompt.
+
+--------------------------------------------------
+
+3) 🔍 Co-op Directory Page
+Path: `/directory`
+
+Purpose:
+- Public list of all **approved + published** co-ops
+- Each links to `/c/{co-op-slug}` landing page
+
+Features:
+- Search by name or city/state
+- Filter by state (optional)
+- Clicking a co-op opens its public page
+
+--------------------------------------------------
+
+4) 🧾 About Page
+Path: `/about`
+
+Purpose:
+- Explain Bramble’s philosophy and differentiation
+- Who it’s for
+- Why it’s invisible
+
+Copy Suggestions:
+- “Bramble isn’t a marketplace or a social network.”
+- “It’s quiet, intentional infrastructure built for homeschool communities.”
+
+--------------------------------------------------
+
+5) 📄 Legal Pages
+Paths: `/privacy`, `/terms`
+
+Purpose:
+- Required for public launch
+- Link from footer
+
+--------------------------------------------------
+
+TIE-IN TO PREVIOUS PROMPT:
+✅ This public site is the **entry point** into the Co-op Application Flow:
+- The `/start` page uses the same form + data model (`CoopApplication`)
+- On submit, application goes to `/operator/applications`
+- Operator reviews and approves → triggers tenant + admin setup
+- Applicant receives magic login link to begin setup
+
+--------------------------------------------------
+
+OPTIONAL ENHANCEMENTS (Phase 2)
+--------------------------------------------------
+
+- Add light SEO meta for “homeschool co-op management software”
+- Include testimonials (if available)
+- Add “Powered by Bramble” footer link to `/` from all `/c/{co-op-slug}` co-op sites
+- Add referrer field to application form (optional tracking)
+
+--------------------------------------------------
+
+SUCCESS CRITERIA
+--------------------------------------------------
+
+- Users understand what Bramble is in 10 seconds
+- Users can start a co-op without logging in
+- All submitted co-op applications route into the operator flow
+- Approved co-ops get their own white-labeled site and admin login

@@ -1,0 +1,256 @@
+- ALI TEST RUN THROUGH CHAT
+    
+    ## Bramble: Cleaned Issues, Bugs, and Feature Tracking
+    
+    ---
+    
+    ### 🔴 Navigation & Routing Bugs
+    
+    **Issue:** Post-Signup Return Loop
+    
+    - After submitting a new co-op application , the "Return to Home" button routes back to the signup page / FORM instead of the Bramble homepage.
+    - **Expected:** Redirect user to the actual homepage or a Thank You screen.
+    
+    **Issue:** Bramble Admin > Exit Tenant View Results in Access Denied
+    
+    - When a Bramble Admin exits tenant impersonation, they're presented with an "Access restricted" error.
+    - **Expected:** Redirect to Bramble Admin dashboard, not a blocked state.
+    
+    **Issue:** Co-op Admin > Add Child Form Doesn't Scroll
+    
+    - Add Child popup is truncated on smaller screens.
+    - **Expected:** Scrollable popup or center modal.
+    - **Concern:** are these not a reusable section - if so, why is it different than others that i believe are working?  i have concerns over correctnly using reusable compnents?
+    
+    ---
+    
+    ### 🔶 Approval & Role Management
+    
+    **Issue:** No way to undo denial (family, class, instructor, event)
+    
+    - Admins cannot reverse a reject action.
+    - **Expected:** Admins should be able to revert status from Rejected to Pending or Approved.
+    
+    **Issue:** No email notification when applications are denied
+    
+    - Families or instructors don't receive updates on denial.
+    - **Expected:** Basic denial email with a message: "You were not approved at this time. Please wait for follow-up."
+    
+    **Issue:** No warning/confirmation when rejecting applications
+    
+    - Clicking reject acts immediately.
+    - **Expected:** Confirmation modal before finalizing.
+    
+    **Issue:** Admin can't unapprove or suspend a previously approved user
+    
+    - No ability to downgrade roles or deactivate families/instructors.
+    - **Expected:** Suspend/disable feature or revert to "Pending".
+    
+    **Issue:** Cannot delete or archive users, families, classes, etc.
+    
+    - No soft deletion or archival logic.
+    - **Expected:** Ability to archive records with confirmation and backend fallbacks (not permanent deletion).
+    
+    ---
+    
+    ### 
+    
+    ### 🔶 **Signup & Password Logic (Unified System-Wide Standard)**
+    
+    **Global Rule:**
+    
+    🔒 **All user passwords must be created by the user via a secure link**.
+    
+    - No admin sets passwords manually
+    - No default or temporary passwords
+    - Always use tokenized invite/setup URLs
+    
+    ---
+    
+    ### ✅ **Signup via Co-op Application**
+    
+    **Issue:** Co-op application form prompts user to set a password before approval
+    
+    - **Expected Behavior:**
+        - User submits application with name and email only
+        - After approval, Bramble sends a secure email:
+            
+            > “You’ve been approved! Set your password to access your co-op.”
+            > 
+    
+    ---
+    
+    ### ✅ **Inviting Families or Instructors**
+    
+    **Issue:** Admin invites currently ask them to set a password or assign one
+    
+    - **Expected Behavior:**
+        - Admins **only enter the invitee’s name + email**
+        - System sends invite email with a secure password setup link:
+            
+            > “You’ve been invited to join [Co-op Name]. Click here to finish setting up your account.”
+            > 
+    
+    ---
+    
+    ### ✅ **Signup Confirmation Emails (Missing)**
+    
+    **Issue:** No emails are sent on application or invitation submission
+    
+    - **Expected Behavior:**
+        - Families receive:
+            
+            > “Thanks for applying to [Co-op Name]. Your application is under review. We’ll notify you once approved.”
+            > 
+        - Co-op Admins receive:
+            
+            > “New application received from [Name]. Review it in your dashboard.”
+            > 
+    
+    ---
+    
+    ### 
+    
+    ### ✅ **Inconsistent Modal Use**
+    
+    **Issue:** Family approval uses a **side popup**, but editing a child uses a **center modal**
+    
+    - **Expected:** All modal flows (approve, edit, view) should use **one standard** — preferably a reusable **center modal component** for uniform UX.
+    
+    ---
+    
+    ### 🐞 **Broken Interaction — Edit Child (Rejected Family)**
+    
+    **Issue:** Clicking “Edit Child” on a rejected family **closes the screen** without opening a form
+    
+    - **Expected:** Modal should open for editing, even for rejected/inactive families
+    
+    ---
+    
+    ### 🔄 **Role Switcher Placement**
+    
+    **Issue:** Role switcher (Family ↔ Admin ↔ Instructor) is **not discoverable**
+    
+    - **Expected:** Move the role switcher to the **top navbar** for better visibility and accessibility, especially for users with multiple roles
+    
+    ---
+    
+    ### 🔴 Instructor & Class Logic Bugs
+    
+    **Issue:** Create Class > Requires Instructor or breaks
+    
+    - Form fails silently or errors out.
+    - **Expected:** Allow draft class creation without instructor OR notify clearly.
+    
+    **Issue:** Edit Class resets fields (location, instructor, etc.)
+    
+    - Saving edits creates a duplicate class/session.
+    
+    **Issue:** Publish/Unpublish toggle is dead
+    
+    - Button doesn’t update state visually or in backend.
+    
+    **Issue: Class create / edit as admin, set** Price $6 shows as $0.06 to instructor public
+    
+    - Decimal bug in formatting.
+    
+    **Issue:** Coop Admin > Instructors with role also as parent don’t appear in list
+    
+    - **Expected:** All users with Instructor role appear, regardless of other roles.
+    
+    **Issue:** Instructor doesn’t get class approval notification
+    
+    - No dashboard alert or email.
+    - **Expected:** Notification badge dash card  visuals + email when class status changes.
+    
+    **Issue:** Instructor > Create Class = two "Location" fields
+    
+    - Should be one dropdown (from global search automatically populate) and one optional field - “Location Details” that is form field
+    
+    ---
+    
+    ---
+    
+    ### 🔶 Parent & Family Flows
+    
+    **Issue:** Family > My Children = inconsistent UI
+    
+    - Some children show classes enrolled, others do not.
+    - Classes not clickable.
+    
+    **Issue:** Unfinished child profile = form pre-fills when returning
+    
+    - No warning about unsaved form state.
+    - **Expected:** Reset form on page exit, warn before loss.
+    
+    **Issue:** Can't rename class once created
+    
+    - Error on submission.
+    
+    ---
+    
+    ### 🟢 Local Provider Directory (Feature Request)
+    
+    **Goal:** Create a searchable directory of instructors, businesses, services
+    
+    - Approved instructors auto-listed
+    - Admins can add/edit/delete entries
+    - Fields: Name, Website, Description, Category, Contact Info
+    - Categories should be filterable
+    
+    ---
+    
+    ### 🔶 UI/UX & Layout Issues
+    
+    **Issue:** Cards are too large (Instructor & Parent dashboards)
+    
+    - Need alternate list view
+    
+    **Issue:** Instructor cannot see their class approval status clearly
+    
+    - Add badge or status chip to class cards
+    
+    **Issue:** No class preview modal from "My Children" view
+    
+    - Expected: click class name to open existing class card
+
+# Discussions To Be Had
+
+### ⚠️ Class/Session Logic = Requires Further Definition
+
+These are strategic decisions, not bugs. Organize discussion around:
+
+- 📩 Course vs. Class vs. Session hierarchy
+- 📩 Repeating sessions: Fall Welding, Spring Welding
+- 📩 Single-class instances
+- 📩 Rescheduling, adding a single class to a session
+- 📩 Duplicating a class with a new schedule
+- 📩 Prerequisite field = change to "Prerequisites and Notes"
+- 📩 Class roster + signup per session, not course
+- 📩 Allow drop-in, pay-per-class models?
+
+### 🔶 Communications & Messaging
+
+**Issue:** Discussion around messaging strategy
+
+- Can we integrate Replit-native tools?
+- Telegram considered?
+- Feature parity needed for recurring events (e.g., Forest Friends group updates)
+- **Suggested:** Prioritize communication for recurring community use.
+
+---
+
+### 🔶 **Admin Panel UX & Modal Logic — Global Consistency Needed**
+
+**🧠 Global UX Question:**
+
+> What is the default interaction pattern for user interactions like approval, editing, or viewing?
+> 
+> 
+> Should we use:
+> 
+> - ✅ **Center modals** (consistent, reusable, and full content visibility)?
+> - ❌ **Side popouts** (inconsistent use, limited space)?
+> 
+> ⚠️ A global decision is needed to enforce a **reusable modal strategy** across the platform (especially for approval flows, profile edits, and class/event actions).
+>

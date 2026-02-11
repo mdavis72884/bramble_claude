@@ -1,0 +1,75 @@
+GOAL:
+Clean up child profile experience, fix scrolling issues, ensure consistent component use, improve data validation, and adjust visibility + permissions for events and classes.
+
+---
+
+## 🔧 CHILD PROFILE FIXES
+
+1. ✅ +Add Child Form (Family Manager / Parent View)
+- The current modal form is using the outdated version
+- Replace with the **new full child profile form** (includes learning style, philosophy, etc.)
+1. 🧼 Child Profile View (Admin View)
+- Child profile card is **cut off at the bottom** — scrolling is broken
+- Ensure full scrollable modal or expandable workspace
+- Apply fix to all roles that can view child profiles (Co-op Admin, Instructor)
+1. 📍 UI: Move "Edit Profile" button
+- Move “Edit Profile” to the **top of the child profile card**
+- Keep “Remove/Delete” at the **bottom**
+1. ♻️ REMINDER create and Reuse shared components wherever possible
+
+---
+
+## 📐 DASHBOARD & CARD UI REVIEW
+
+1. 🧾 Children / Enrollments / Sessions Cards
+- Current cards are **too large and visually dominant**
+- Consider **simplified versions for non-dashboard pages**
+- Only show **dashboard-style cards on dashboards**
+- Use more compact layouts elsewhere (e.g. profile/workspaces)
+1. 🧮 Card Consistency
+- Cards should appear **even if the count is zero**
+- Remove coloring when 0
+
+---
+
+## 🗓️ CLASS & EVENT FORM LOGIC
+
+1. 🧑‍🏫 Instructor Class Creation
+- Required fields:
+    - Title
+    - Description
+    - Start date (cannot be in the past)
+    - End date (must be after start)
+    - Start time + End time
+    - Location (required)
+- Validate date logic:
+    - No past start dates
+    - End date must be same or after start date
+1. 📅 Event Creation (New Permissions + Rules)
+- Instructors and Parents should be able to create events
+- Events require **Co-op Admin approval**
+- Required fields:
+    - Title
+    - Description
+    - Date (no past dates)
+    - Location
+- Add:
+    - **Badge + Card indicator** for pending events (like classes)
+    - Admin approval flow
+1. 🔁 Data Logic Checks (Events & Classes)
+- Prevent creation of **past-dated events or classes**
+- Ensure required fields are enforced:
+    - Date
+    - Location
+    - Description
+
+---
+
+## ✅ SUCCESS CRITERIA
+
+- New child profile form is fully implemented everywhere
+- Modals and profile views scroll properly on all roles
+- Card layouts are calm, informative, and size-appropriate
+- Class & event forms have correct required fields and validations
+- Events can be created by instructors/parents, pending admin approval
+- Shared components are reused wherever possible

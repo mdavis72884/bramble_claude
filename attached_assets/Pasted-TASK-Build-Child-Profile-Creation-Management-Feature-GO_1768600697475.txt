@@ -1,0 +1,131 @@
+TASK: Build Child Profile Creation & Management Feature
+
+GOAL:
+Allow parents to create and manage detailed profiles for each of their children.
+This profile will support personalized class recommendations, curriculum alignment, and AI-based learning tools in Bramble.
+
+This task supports Bramble’s personalized, trust-first UX for families and connects to future AI tooling.
+
+---
+
+## PAGE / COMPONENT TO BUILD
+
+📄 Page: Add/Edit Child Profile
+Path: /family/children (hub)
+→ Individual child profiles = /family/children/:id (workspace)
+
+---
+
+## FIELDS TO INCLUDE
+
+🔹 CORE INFO:
+
+- firstName (required)
+- lastName (optional/private)
+- birthdate (required)
+- grade (optional text/dropdown)
+- profileImageUrl (optional)
+
+🔹 INTERESTS:
+
+- Multi-select input or tag-based (e.g., "science", "music", "animals")
+
+🔹 LEARNING STYLES (Predefined Options):
+Allow parent to select:
+
+- Primary (required)
+- Secondary (optional)
+
+Learning Style Options (with descriptions):
+
+- Visual – Learns best by seeing things—pictures, diagrams, color, and visual examples.
+- Auditory – Learns best by listening, talking things through, and hearing explanations.
+- Hands-On (Kinesthetic) – Learns best by moving, building, touching, and doing.
+- Reading & Writing – Learns best by reading, writing, and working with text.
+- Social – Learns best with others through conversation, teamwork, and shared ideas.
+- Independent – Learns best alone, with time to think and work at their own pace.
+- Logical – Learns best through patterns, steps, problem-solving, and clear structure.
+- Creative – Learns best through stories, imagination, art, and open-ended exploration.
+- Multi-Sensory – Learns best when learning includes a mix of seeing, hearing, and doing.
+
+🔹 EDUCATIONAL PHILOSOPHIES (Predefined Options):
+Allow parent to select:
+
+- Primary (required)
+- Secondary (optional)
+
+Educational Approach Options (with descriptions):
+
+- Classical Education – Learning through great books, discussion, and clear thinking.
+- Traditional / Textbook-Based – Structured lessons with clear expectations, schedules, and progress.
+- Charlotte Mason – Gentle learning with meaningful books, short lessons, and time outdoors.
+- Montessori – Hands-on learning that encourages independence and self-direction.
+- Waldorf – Learning through stories, art, imagination, and rhythm.
+- Project-Based Learning – Learning by working on real-world projects and ideas.
+- Interest-Led / Student-Led Learning – Learning guided by a child’s natural interests and curiosity.
+- Reggio Emilia – Creative, exploratory learning shaped by curiosity and environment.
+- Nature / Forest School – Learning rooted in outdoor exploration and hands-on experiences in nature.
+
+🔹 SUPPORT NEEDS (Optional Fields):
+
+- neurodivergentNotes (optional, private)
+- healthNotes (optional, private)
+- parentNotes (optional, private)
+- preferredLearningEnvironment (optional select: Solo / Small Group / Large Group)
+
+🔹 PRIVACY OPTIONS:
+
+- shareWithInstructors (boolean)
+- visibleToOtherParents (boolean, default: false)
+
+---
+
+## UI & UX NOTES
+
+- Group form fields into 3 clear sections:
+    1. Identity
+    2. Learning Style & Educational Fit
+    3. Support & Notes
+- Use progressive disclosure:
+→ Only show optional fields after core info is filled
+- Show definitions for learning styles and philosophies on hover or info icons
+- Save-as-you-go: Auto-save data in session in case of form interruption
+- On submit: Redirect back to /family/children hub, showing new profile
+
+---
+
+## DATA MODEL SUGGESTION
+
+ChildProfile:
+
+- id
+- parentId (FK)
+- firstName
+- lastName
+- birthdate
+- grade
+- profileImageUrl
+- interests[]
+- learningStylePrimary
+- learningStyleSecondary
+- educationalPhilosophyPrimary
+- educationalPhilosophySecondary
+- preferredLearningEnvironment
+- neurodivergentNotes
+- healthNotes
+- parentNotes
+- shareWithInstructors (default: true)
+- visibleToOtherParents (default: false)
+- createdAt
+- updatedAt
+
+---
+
+---
+
+## SUCCESS CRITERIA
+
+- Parents can easily create/edit full child profiles
+- UI supports structured learning style + philosophy input
+- Optional fields are not overwhelming
+- All data saved securely and scoped to co-op

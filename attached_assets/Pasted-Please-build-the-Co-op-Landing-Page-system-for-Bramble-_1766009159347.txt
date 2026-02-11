@@ -1,0 +1,69 @@
+Please build the Co-op Landing Page system for Bramble tenants, with AI-generated fallback visuals and admin editing capabilities.
+
+---
+
+GOAL:
+Every tenant (co-op) should have a customizable public landing page at:
+→ /t/{tenantSlug}
+
+This is the public entry point for co-op members and families.
+
+---
+
+REQUIREMENTS:
+
+✅ PUBLIC LANDING PAGE
+- Route: /t/{tenantSlug}
+- Public page with:
+  - Logo (from branding or AI placeholder)
+  - Header image (uploaded or AI stock image)
+  - Co-op name
+  - About section (rich text)
+  - Pricing section (optional)
+  - Public class list (if enabled)
+  - Public event list (if enabled)
+  - “Apply to Join” button (links to application form)
+  - “Log In” button (visible if auth enabled)
+
+✅ IMAGE LOGIC
+- If no logo or header image is uploaded:
+  - Use AI logic to select suitable placeholder:
+    - stock homeschool, community, family learning imagery
+    - match tenant name keywords to choose fitting theme
+- Images should look warm, calm, professional
+- Store image URLs (or categories) in `tenant_landing_pages` or branding fields
+
+✅ ADMIN LANDING PAGE EDITOR
+- Location: Co-op Admin Dashboard → "Landing Page"
+- Fields:
+  - Select layout (from 3 predefined templates)
+  - Upload header image
+  - Edit About section (rich text)
+  - Edit Pricing section
+  - Toggle class visibility
+  - Toggle event visibility
+- Preview mode
+- Save functionality with visual feedback
+- Use Zod validation
+- Store content in `tenant_landing_pages` (or extend branding)
+
+✅ PLATFORM VISIBILITY (Bramble Operator)
+- Location: Bramble Console → Tenants → Tenant Details → “Preview Landing Page”
+- Read-only view of public page
+- Show link in tenant profile section
+
+✅ UX / DESIGN
+- Calm, editorial tone
+- Placeholder images and text for empty states
+- Tooltips and helper hints in editor
+- Form-based editing (no custom HTML)
+
+✅ TECH SCOPE
+- Extend `tenant_branding` or create `tenant_landing_pages`
+- Use existing REST patterns, JWT auth, tenant scoping middleware
+- Use existing routes and forms structure
+
+⛔ DO NOT:
+- Implement custom domains
+- Add uncontrolled HTML inputs
+- Build a full CMS or page builder

@@ -1,0 +1,88 @@
+{
+  "colorScheme": "light",
+  "fonts": [
+    {
+      "family": "museo-sans",
+      "count": 67
+    },
+    {
+      "family": "sans-serif",
+      "count": 3
+    },
+    {
+      "family": "Recoleta",
+      "count": 2
+    },
+    {
+      "family": "Helvetica Neue",
+      "count": 1
+    },
+    {
+      "family": "Arial",
+      "count": 1
+    }
+  ],
+  "colors": {
+    "primary": "#000000",
+    "accent": "#AE8660",
+    "background": "#FFFFFF",
+    "textPrimary": "#AE8660",
+    "link": "#AE8660"
+  },
+  "typography": {
+    "fontFamilies": {
+      "primary": "sans-serif",
+      "heading": "museo-sans"
+    },
+    "fontStacks": {
+      "body": [
+        "sans-serif"
+      ],
+      "heading": [
+        "museo-sans"
+      ],
+      "paragraph": [
+        "museo-sans"
+      ]
+    },
+    "fontSizes": {
+      "h1": "18.6px",
+      "h2": "44.8px",
+      "body": "17.6px"
+    }
+  },
+  "spacing": {
+    "baseUnit": 10,
+    "borderRadius": "0px"
+  },
+  "components": {},
+  "images": {
+    "logo": "File saved at: attached_assets/logo.webp",
+    "favicon": "File saved at: attached_assets/favicon.webp",
+    "ogImage": null
+  },
+  "__framework_hints": [],
+  "__llm_logo_reasoning": {
+    "selectedIndex": 1,
+    "reasoning": "Strong indicators: variant bonus (+8), header logo linking to homepage, header location, visible, top-left position, class contains logo, alt exactly matches brand name \"AllieMarie Design\", reasonable size. Score: 133 (clear winner by 83 points)",
+    "confidence": 0.9
+  },
+  "__llm_button_reasoning": {
+    "primary": {
+      "index": -1,
+      "text": "N/A",
+      "reasoning": "LLM failed"
+    },
+    "secondary": {
+      "index": -1,
+      "text": "N/A",
+      "reasoning": "LLM failed"
+    },
+    "confidence": 0
+  },
+  "confidence": {
+    "buttons": 0,
+    "colors": 0,
+    "overall": 0
+  }
+}

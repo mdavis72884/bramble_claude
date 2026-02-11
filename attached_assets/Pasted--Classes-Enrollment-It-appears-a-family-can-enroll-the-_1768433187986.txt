@@ -1,0 +1,96 @@
+**Classes / Enrollment**
+
+- It appears a family can enroll the same child multiple times (or the UI allows duplicate enrollment).
+- In the **Maria Martinez** family, I already enrolled both children, but the class card still shows an **“Enroll”** button instead of an **“Enrolled”** state.
+
+Please audit and fix the full enrollment flow to ensure:
+
+- No duplicate enrollments are possible (same child → same class)
+- UI states are correct and consistent (Enroll vs Enrolled)
+- Rosters, counts, and dashboards reflect the true enrollment status
+
+**Events / RSVPs**
+
+Please ensure event RSVPs appear in the correct places across the app, including:
+
+- The event detail page (RSVP status)
+- The parent/family schedule view
+- The parent overview dashboard “Upcoming schedule” section
+
+Overall request:
+
+Run a full audit of enrollment + RSVP logic as well as all logic so states, routing, and display are clean, predictable, and consistent everywhere.
+
+parent dashboard / overview, classes cards etc  needs to be restructured / designed:
+
+PARENT DASHBOARD CONTENT
+────────────────────────
+
+TOP SECTION (Context)
+
+- Co-op name + logo
+- Simple welcome line (e.g. “Welcome to Willow Creek Co-op”)
+- Optional short co-op message set by Co-op Admin
+
+────────────────────────
+PRIMARY CARDS (Most Important)
+────────────────────────
+
+1. This Week’s Classes
+- Child name
+- Class name
+- Day / time
+- Location or “online”
+- Status (upcoming / today)
+- Click → Class Detail page
+1. Messages & Announcements
+- Latest co-op announcement
+- Latest instructor message
+- Simple “View messages” link
+- Click → Messages / Announcements page
+1. Your Children
+- Small cards per child
+- Name + age
+- Next class or activity
+- Actions:
+    - “View plan”
+    - “View progress”
+- Click → Child Profile page
+
+────────────────────────
+SECONDARY CARDS
+────────────────────────
+
+1. Upcoming Events
+- Event name
+- Date
+- RSVP status
+- Click → Event Detail page
+- RSVP handled on Event page (not on dashboard)
+1. Resources for You
+- Curated resources based on:
+    - Child age
+    - Current curriculum
+- Click → Resource Hub
+
+────────────────────────
+INTERACTION RULES
+────────────────────────
+
+- Cards are summaries only
+- Clicking a card always navigates to a full page
+- No heavy modals on the dashboard
+- No editing inside dashboard cards
+- RSVP, enrollment, and messaging happen on dedicated pages
+
+────────────────────────
+WHAT NOT TO SHOW
+────────────────────────
+
+- No admin tools
+- No billing status
+- No system alerts
+- No configuration controls
+
+The Parent Dashboard should answer one question:
+“What’s useful or relevant for my family right now?”

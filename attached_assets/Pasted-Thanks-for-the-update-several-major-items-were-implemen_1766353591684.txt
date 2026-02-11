@@ -1,0 +1,55 @@
+Thanks for the update — several major items were implemented correctly (especially role assignment and tenant creation), but a few important parts were either incomplete or missing entirely.
+
+🔧 Critical Missing Elements
+
+Role Switcher UI
+
+✅ Role assignment works ✅
+
+❌ But no user-facing UI exists for switching roles.
+
+🔧 Please add a visible role switcher (tab or dropdown) so users can actively toggle between roles (e.g., Co-op Admin, Instructor, Family).
+
+Impersonation UI/UX
+
+✅ Functionality is working (backend & banner)
+
+❌ But there's no easy access UI to initiate impersonation from the Bramble dashboard.
+
+🔧 Need: clear button or action menu from the Bramble admin view to select a tenant and impersonate a specific user.
+
+also i get this error when i go to the Manage Tenant Page: 
+
+Invalid 'prisma.user.findMany() invocation in /home/runner/workspace/server/routes.ts:316:39
+313 314 app.get("/api/tenants/:tenantld/users",
+authMiddleware,
+requireRole ("BRAMBLE_OPERATOR"), async (reg, res) → { 315 try { → 316 const users = await
+prisma.user.findMany({ where: { tenantld:
+"cmjeu9h8g000403eomvgqcuyg" }, select: { id:
+true, firstName: true, lastName: true, email: true, role: true, status: true, ~~~~~~?
+passwordHash?: true, ? secondaryRoles?: true, ?
+tenantld?: true, ? isActive?: true, ?
+applicationStatus?: true, ? bio?: true, ? phone?:
+true, ? createdAt?: true, ? updatedAt?: true, ?
+tenant?: true, ? children?: true, ?
+instructedClasses?: true, ? registrations?: true, ?
+payments?: true, ? chatMessages?: true, ?
+auditLogs?: true, ? _count?: true }, orderBy: {
+createdAt: "desc" } }) Unknown field 'status for select statement on model 'User'. Available options are marked with ?.
+
+🔄 Next Tasks to Continue (in this order):
+
+Add Role Switcher UI (dropdown or tab)
+
+Add user-facing access to Impersonation from Bramble admin panel
+
+Simulated Email System (with templates + logs)
+
+Communications Hub overhaul (visual editor, layout options)
+
+Calendar click-throughs + overflow fix
+
+Receipt download/print functionality
+
+Soft-delete + confirmation logic (classes, families, instructors) 
+

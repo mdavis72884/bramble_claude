@@ -1,0 +1,157 @@
+## Bramble Final Fix & Completion Prompt
+
+This is a comprehensive task prompt for completing all remaining work on Bramble. The objective is to finish integration, fix bugs, and finalize system logic and UX for all roles. **No new features** should be introduced beyond this list. Every item must be implemented with proper UX, validations, and error handling.
+
+---
+
+### 1. 🔐 Role Switcher (Multi-Role Support)
+
+- RoleSwitcher UI component must be:
+  - Visible for users with multiple roles (Admin + Instructor + Family)
+  - Available across all portal layouts (not just one view)
+  - Display even with one role if impersonating
+- Co-op Admins must be able to assign secondary roles (Instructor, Family, Admin)
+- All dashboards must respond dynamically to current role context
+
+---
+
+### 2. 👥 User Account Management
+
+- **Create vs. Invite Flows:**
+  - Create = admin generates credentials & sends login details via automated email
+  - Invite = user gets a signup link via automated email
+- Co-op Admins must be able to create/invite:
+  - Families
+  - Instructors
+- Bramble Operators must be able to create/invite:
+  - Tenants (Co-ops) with default email
+- Each action sends a distinct email template
+- Email system should simulate sending (store + log emails), not use live SMTP or API
+
+---
+
+### 3. 👤 Impersonation (Platform Admin)
+
+- Impersonation must be:
+  - Accessible via "View As" button directly in the Tenants list table
+  - Clearly marked with a visual banner showing active impersonation
+  - Exitable with a "Stop Viewing" button that returns to admin account
+- Impersonation must grant the same UI/UX as real user (no restrictions)
+
+---
+
+### 4. 🧑‍🏫 Instructor Dashboard Fixes
+
+- Fix blank states on:
+  - Payout view
+  - Calendar
+  - Messages tab
+- Roster tab:
+  - Must list students + parent contact info
+- Sessions/Notes tab:
+  - Editable, clear UI
+  - Save functionality must work
+- Messaging:
+  - Instructors can message all families in class (not individual threads)
+  - Families can reply (2-way)
+- Instructor should never be redirected to wrong dashboard after performing actions
+
+---
+
+### 5. 📅 Calendar
+
+- Co-op Admin calendar must match Family view with:
+  - Clickable items → show details popup or page
+  - "+X More" overflow days must expand properly
+  - Optional: Toggle between daily/weekly/monthly views if simple
+- Instructors should have **read-only** calendar to view their classes + co-op events
+- Ensure responsive design across devices
+
+---
+
+### 6. 💬 Communications Hub
+
+- Revamp UI to support visual/styled messages (3 layout styles)
+  - Newsletters
+  - Announcements
+  - Automations
+- Automations:
+  - Trigger/action-based (e.g., "new family joins" → send welcome email)
+  - UI should be simplified, non-code logic builder
+- Add preview, test-send, history/logging for all comms
+
+---
+
+### 7. 📧 Simulated Email System
+
+- Simulated sending for all system-triggered emails:
+  - Invite / Create
+  - Enrollment confirmation
+  - RSVP confirmation
+- Emails must:
+  - Use stored templates
+  - Be editable per co-op
+  - Show logs of all emails sent
+- No live delivery (just database + console log)
+
+---
+
+### 8. ⚠️ Deletion & Confirmation Logic
+
+- Replace all hard deletes with soft deletes
+- Show clear warnings on:
+  - Deleting instructors, families, classes, events
+- Audit log must track all destructive actions
+
+---
+
+### 9. 🧪 Test Data
+
+- Seed 2 test users per role:
+  - 2 Operators, 2 Admins, 2 Instructors, 2 Families (each with 2 children)
+- Include:
+  - Sample class with paid enrollment
+  - Sample event with RSVP
+  - Sample chat messages
+  - Sample email logs
+
+---
+
+### 10. 📦 Starter Pack vs Demo Pack
+
+- Starter Pack:
+  - Usable resources (email templates, curriculum, resources)
+  - Applied to all new tenants
+  - Managed by Bramble globally
+- Demo Pack:
+  - Fake/placeholder content (fake classes, events, resources)
+  - Shown only for orientation (non-functional)
+- Both should be visually distinct and manageable from the platform admin
+
+---
+
+### 11. 🔄 Visual/UX Polishing
+
+- Badges across dashboards for:
+  - New chats
+  - Announcements
+  - Pending approvals
+- Add announcement section under Messages tab for all users
+- All cards (classes, events, chats) must be clickable
+- Apply consistent spacing, typography, colors, padding throughout
+
+---
+
+### ❌ REMOVE
+
+- Receipt Generator (not needed)
+
+---
+
+### ✅ Final Checks
+
+- Return full list of what was fixed and what remains
+- Ensure nothing outside of this spec is added
+- Keep mock/demo content where appropriate for onboarding
+- DO NOT enable Stripe or real email
+- DO NOT introduce new features not explicitly listed above

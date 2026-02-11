@@ -1,0 +1,218 @@
+## Prompt: Bramble App Fixes and Feature Enhancements
+
+---
+
+### Section 1: General System Integration and Fixes // Phase 1
+
+✅ Perform a complete integration pass to ensure all real backend API connections are live and working across all roles. Replace all mock data with actual database-linked content.
+
+* Family Dashboard: class enrollment, RSVP, child management, order view
+* Instructor Dashboard: view rosters, add notes, see earnings and payout status
+* Admin Dashboard: save and update settings (branding, pricing, classes, events, announcements), review/approve users
+* Chat: real messaging for class chats and main co-op chat
+
+✅ All buttons, links, and interactions should function without errors. Fix broken buttons and any dead ends across the platform.
+
+✅ Visual indicators (badges, highlights, etc.) should appear for:
+
+* Pending applications
+* New messages
+* Announcements
+* Unread items
+
+✅ All cards and items (classes, events, chats, resources) should be clickable and lead to logical destinations or popups with more info.
+
+🚨 Known issue: Some buttons and flows (like “Starter Pack”) appear present in the UI but are currently non-functional or misleading. Please audit and either activate or hide appropriately.
+
+---
+
+### Section 2: Calendar and Scheduling // Phase 2
+
+✅ Add a calendar view for **Co-op Admins** — same logic and layout as Family view.
+
+✅ Events and classes on calendar must:
+
+* Be clickable → popup or navigate to item with basic info (date, time, instructor, location, enrolled children)
+* Show proper overflow ("+X more" expands)
+* Include optional daily/weekly view toggle if feasible without heavy UI burden
+
+✅ Instructors should have a **read-only calendar view** to help avoid scheduling conflicts.
+
+✅ Ensure mobile responsiveness across calendar views.
+
+---
+
+### Section 3: Role Management and Switching // Phase 2
+
+✅ Users can hold multiple roles (e.g., Co-op Admin + Family + Instructor).
+
+✅ Add a **simple UI switcher (tab or dropdown)** to toggle between dashboards relevant to each role.
+
+✅ Co-op Admins must be able to assign additional roles to users (e.g., make Instructor also a Parent or Admin).
+
+✅ Each role's features and permissions should display accordingly when toggled.
+
+🔄 Maintain clear breadcrumb or visual indicator to show active role.
+
+---
+
+### Section 4: Class & Instructor Management // Phase 3
+
+✅ Co-op Admins should be able to:
+
+* Create, suspend, and delete instructors (with clear warnings)
+* Manage instructor roles and see application status
+
+✅ Instructors should be able to:
+
+* Create class drafts and submit for approval
+* View/manage sessions, notes, rosters
+* Edit class (where allowed); certain changes should trigger admin re-approval
+* Message enrolled families via class chats or announcements
+* See relevant family info (names, contact)
+
+✅ Instructor Dashboard improvements:
+
+* Show class info visually (enrollment count, sessions, payouts)
+* Include smart filters for payouts and classes (by student, family, class, etc.)
+
+✅ Add visual consistency with Bramble’s design system (typography, spacing, styling).
+
+---
+
+### Section 5: Payments & Receipts // Phase 3
+
+✅ Payment Workflow:
+
+* Paid class enrollment triggers payment and receipt
+* Free classes/events bypass payment, auto-enroll
+* Events follow same logic
+
+✅ Receipt generator:
+
+* Available for paid classes only
+* Shows class title, child name, parent name, amount, date
+* Downloadable/printable PDF format
+
+✅ Admin/Instructor payment views:
+
+* Add filters: by class, family, date, status
+* Clear summary: pending, paid, historical totals
+
+✅ Responsive layout for mobile use
+
+---
+
+### Section 6: Communications Hub // Phase 4
+
+✅ Rebuild the Communications Hub with visual editing tools (like the landing page editor):
+
+* Support styled newsletters, automations, and targeted messages
+* Provide 3 layout templates
+* Allow image uploads or auto-suggested stock images
+* Preview before send
+
+✅ Automations UI should be non-technical:
+
+* Formatted with readable trigger/action lists
+* Bramble controls defaults; co-ops can override and add their own
+
+✅ Admin Chat Access:
+
+* Co-op Admins must see/manage chats
+* Add menu link and access panel
+* Allow admin to manage chat groups per class
+* Optional: global instructor chat channel
+
+✅ Chat Logic:
+
+* Main co-op chat includes families, optionally instructors
+* Class chats created automatically per class
+* Event chat = NO, unless admin manually enables
+
+✅ Badge alerts and visual highlights for new chats/messages
+
+---
+
+### Section 7: Email System // Phase 4
+
+✅ Set up **simple, non-API-based email system** for one-way emails:
+
+* Separate systems for Bramble and each Co-op
+* Admins can send to selected groups
+* Emails are logged; no replies handled (1-way only)
+
+✅ UI should include:
+
+* Email composer with title, body, image upload, preview
+* Send test email option
+* History of emails sent
+
+✅ Align visually with platform UI style
+
+---
+
+### Section 8: Bramble Admin Access & Safety // Phase 1
+
+✅ Bramble Operator (Platform Admin) must be able to:
+
+* Access all tenants
+* View/manage tenant users, emails, content (read-only or editable via impersonation only)
+* Use impersonation tool to act as tenant member for support
+
+✅ Add deletion safeguards:
+
+* Confirmations before deleting anything (users, content, tenants)
+* Optional soft-delete or recovery layer
+
+✅ Add global task audit to ensure platform admin can troubleshoot end-to-end.
+
+🛑 Bramble should not have access to direct communications between users unless impersonation mode is activated.
+
+---
+
+### Section 9: Visual Templates & Starter Content // Phase 2
+
+✅ Replace "Starter Pack" logic with:
+
+* Visual Demo Mode (preloaded dummy content for new users)
+* Template Manager (for Bramble to define email templates, resources, example events, etc.)
+
+✅ Admin can toggle which content gets included by default.
+
+✅ Visually styled content should feel branded and guided.
+
+---
+
+### Section 10: Miscellaneous // Continuous
+
+✅ Curriculum & Resource sections must be visible and usable per tenant
+
+✅ Add 2 test users per role for all environments (Family, Instructor, Admin, Operator)
+
+✅ Learning styles/preferences must be part of child info form:
+
+* Editable by family and co-op admin
+* Default list managed by Bramble
+
+---
+
+### Summary Table: Role-Based Access Overview
+
+| Feature / Action            | Family | Instructor | Co-op Admin | Bramble Admin         |
+| --------------------------- | ------ | ---------- | ----------- | --------------------- |
+| Enroll in Class             | ✅      | ❌          | ❌           | ❌                     |
+| Create Class                | ❌      | ✅ (drafts) | ✅           | ❌                     |
+| Approve Applications        | ❌      | ❌          | ✅           | ✅                     |
+| View All Tenants            | ❌      | ❌          | ❌           | ✅                     |
+| Manage Emails / Automations | ❌      | ❌          | ✅           | ✅                     |
+| Access All Chats            | ❌      | Class only | ✅           | ✅ (via impersonation) |
+
+---
+
+✅ Final Check:
+
+* Ensure all features are responsive
+* Use real data only
+* Match visual tone (calm, clear, structured)
+* No new features unless specified

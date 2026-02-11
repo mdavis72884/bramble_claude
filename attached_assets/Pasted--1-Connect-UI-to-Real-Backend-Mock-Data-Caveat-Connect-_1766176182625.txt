@@ -1,0 +1,121 @@
+✅ 1. Connect UI to Real Backend (Mock Data Caveat)
+
+Connect all dashboards to real API data:
+
+Family: class enrollment, RSVPs, child data, calendar
+
+Instructor: classes, rosters, notes, payouts
+
+Admin: class/event creation, approvals, messages, branding
+
+Operator: tenant management, impersonation, email templates
+
+Important: Keep mock/test data where useful for active testing (e.g. in staging seed)
+
+Don’t remove mock data unless a fully working API path replaces it
+
+✅ 2. Fix All Known Functional Issues
+
+Buttons that don’t trigger actions (e.g. class signup, branding save)
+
+Missing or broken route links across dashboards
+
+Instructors can’t draft classes for approval
+
+Cannot manage instructors (create, delete, suspend)
+
+Families can enroll in classes without payment flow
+
+Calendar issues:
+
+Co-op Admin calendar view missing
+
+Items not clickable
+
+“x+ more events” overflow broken
+
+Consider simple weekly/daily view toggle
+
+Cards for classes/events are not clickable or informative
+
+Multiple roles: no way to switch between roles (needs toggle or tab)
+
+✅ 3. Visual, UX & Communication Improvements
+
+Instructor dashboard needs more data and visual hierarchy (students, notes, edit access)
+
+Communications Hub:
+
+Add WYSIWYG/styled layouts (like landing pages)
+
+Simpler logic for automation triggers
+
+Add chat visibility to admin dashboards
+
+Add visual badges/indicators for:
+
+New messages
+
+Pending approvals (dashboards must show this clearly)
+
+Announcement logic:
+
+Show pinned announcements inside the Messages tab for families/instructors
+
+Add stock/AI-chosen visuals for events/classes for better UI engagement
+
+Receipt generator for paid classes (must include child name, class, date, total)
+
+✅ 4. Access, Security & Admin Tools
+
+Add impersonation tool for Bramble to support tenant testing
+
+Confirm Bramble cannot directly edit tenant content
+
+Add soft delete confirmation for critical actions (e.g. delete class/user)
+
+Confirm correct feature visibility for each role
+
+Instructor calendar should show all co-op classes for planning (view-only)
+
+✅ 5. Email System Setup
+
+Simple internal one-way email system for:
+
+Bramble platform admin
+
+Co-op admin
+
+Emails use WYSIWYG editor
+
+Logged only, no external sending (no API/credits)
+
+Set “reply-to” address logic per admin
+
+✅ 6. Template + Demo Content System
+
+Remove old “starter pack” structure
+
+Replace with:
+
+Demo Content: Bramble can preload placeholders for visual appeal (auto-load per new tenant)
+
+Template Manager: Bramble can create/manage global templates (emails, resources, etc.)
+
+✅ 7. Testing & Seed Setup
+
+Add 2 test users for each role (Operator, Admin, Instructor, Family)
+
+Ensure all dashboards and workflows have preloaded content for testing
+
+Keep your internal Routes Page updated — add new links or changed paths as needed
+
+🚫 Do NOT:
+
+Build new features
+
+Enable Stripe or email delivery
+
+Add new APIs
+
+Only use existing routes/components and fix what’s broken or incomplete.

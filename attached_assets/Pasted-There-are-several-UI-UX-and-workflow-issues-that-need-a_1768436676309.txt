@@ -1,0 +1,52 @@
+There are several UI/UX and workflow issues that need a focused audit and redesign.
+
+**Classes & Events**
+
+- Events are not editable by admins after creation — this must be fixed.
+- Instructors currently cannot edit their own classes after creation — this must be fixed.
+- Co-op admins should be able to edit and manage **all** classes and instructors within their co-op.
+
+Please clarify and implement consistent admin control logic:
+
+- Co-op admins should have full control over their co-op, including:
+    - Classes (create, edit, publish, cancel)
+    - Events (create, edit, publish, cancel)
+    - Instructor assignments
+    - Basic child enrollment data (view/edit where appropriate)
+- Platform Admin retains full global control.
+
+**Instructor Experience**
+
+- The Instructor Dashboard needs a full UI/UX overhaul.
+- The “My Classes” section is unclear and underdeveloped.
+- The “Upcoming Sessions” card is showing outdated content (e.g., *Fall Festival & Harvest Celebration* from last year).
+    
+    → Upcoming views must only show future sessions and relevant items.
+    
+
+**Family Overview / Dashboard**
+
+- The Messages & Announcements card currently acts as a simple link with no visual indication of unread messages.
+    - Add clear unread badges or indicators.
+    - Ensure consistency between the overview card and the full messages view.
+- The Upcoming Events card on the family overview is not clickable.
+    - Events should open a modal with key details (date, location, RSVP status).
+    - Users should not be forced to navigate away from the dashboard for basic context.
+- The dashboard should minimize unnecessary page changes.
+    - Parents should be able to view key information without navigating to multiple sections and back.
+    - Use modals or inline expansion where appropriate.
+- Add an **All Classes** card:
+    - Scrollable if there are many classes.
+    - Shows available classes, not just enrolled ones.
+    - Always visible so parents can discover opportunities easily.
+
+**Overall**
+
+A broader audit of logic, permissions, and UI/UX is needed across the app to:
+
+- Reduce friction
+- Improve clarity
+- Ensure consistent behavior
+- Make the platform feel calm, predictable, and well-organized
+
+Please review the entire site with these principles in mind and propose fixes where patterns are inconsistent or incomplete.

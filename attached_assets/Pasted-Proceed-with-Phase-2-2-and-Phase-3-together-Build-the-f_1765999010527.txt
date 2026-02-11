@@ -1,0 +1,80 @@
+Proceed with Phase 2.2 and Phase 3 together.
+
+Build the full backend and frontend for the Family and Instructor portals, plus calendar and session enhancements.
+
+✅ Phase 2.2 – Family & Instructor Portals
+
+Backend:
+- Public co-op routes:
+  - GET /directory/coops
+  - GET /directory/coops/:slug
+  - GET /t/:tenantSlug/landing
+  - POST /t/:tenantSlug/apply (family or instructor)
+- Family routes (after approval):
+  - GET /me/profile
+  - CRUD /me/children
+  - GET /t/:tenantSlug/classes
+  - POST /t/:tenantSlug/classes/:classId/enroll (select child_ids)
+  - GET /t/:tenantSlug/events
+  - POST /t/:tenantSlug/events/:eventId/rsvp (family or child)
+  - GET /me/payments/orders
+  - GET /me/payments/orders/:orderId
+- Instructor routes:
+  - GET /instructor/classes
+  - GET /instructor/classes/:classId/roster
+  - GET /instructor/payouts
+- Chat routes:
+  - GET /tenant/chats (main + relevant class chats)
+  - GET /tenant/chats/:chatId/messages
+  - POST /tenant/chats/:chatId/messages
+  - POST /tenant/classes/:classId/chat/ensure (admin-only)
+- Email automation triggers (log-only):
+  - family_application_received
+  - family_approved
+  - instructor_approved
+  - class_enrollment_confirmed
+  - event_rsvp_confirmed
+  - payment_receipt
+  - class_cancelled
+  - event_cancelled
+
+Frontend:
+- Public:
+  - Co-op landing pages
+  - Application form (family, instructor)
+- Family dashboard:
+  - Profile + children management
+  - Browse + enroll in classes
+  - Browse + RSVP to events
+  - View past orders + receipts
+  - Access main + class chats
+- Instructor dashboard:
+  - View assigned classes
+  - View rosters
+  - View payouts
+  - Access class chats
+- UI follows same calm, clean Bramble style: soft layout, neutral palette, serif/sans-serif pairing
+
+✅ Phase 3 – Calendar, Session Tools, and Notes
+
+Backend:
+- Add recurring session generator:
+  - Extend /tenant/classes to support auto-generating class_sessions with rules (start date, day of week, repeat count)
+- Add calendar-friendly API:
+  - GET /me/calendar (family view of enrolled sessions + events)
+  - GET /instructor/calendar (assigned sessions + events)
+- Add session notes:
+  - POST /instructor/classes/:classId/sessions/:sessionId/notes
+  - GET /me/children/:childId/sessions/:sessionId/notes (view-only)
+
+Frontend:
+- Add weekly/monthly calendar view for:
+  - Family (child’s sessions/events)
+  - Instructor (classes they teach)
+- Add “Add Session Notes” UI in instructor class view
+- Do not include attendance tracking
+- Notes should be private to instructor and viewable by family
+
+⛔ Do not configure Stripe or email provider yet (log-only is fine)
+⛔ Do not add optional features (attendance, exports, impersonation)
+⛔ Do not modify previously built Bramble Console or Tenant Admin

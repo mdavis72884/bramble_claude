@@ -1,0 +1,74 @@
+Please build both levels of public-facing landing pages for Bramble.
+
+---
+
+PART 1: BRAMBLE PLATFORM LANDING PAGE
+Route: /
+Audience: General public, prospective co-ops, families
+
+Content:
+- Logo + Calm hero section
+- Tagline: “A platform for homeschool co-ops”
+- Section: “How Bramble Works”
+  - Overview: co-ops onboard, families join, payments handled by Bramble
+- Section: “Platform Pricing”
+  - Monthly or annual plan tiers (static for now)
+  - What co-ops get (admin tools, payments, calendar, chats)
+- Section: “Find a Co-op”
+  - CTA button → Co-op Directory (opt-in tenant listing)
+- Section: “Start a Co-op”
+  - CTA button → Apply to Bramble
+- Section: “Already a Member?”
+  - CTA: Log In → takes user to login screen
+- Footer with contact, terms, privacy
+- Visuals:
+  - AI-selected calm editorial stock images (education, families, co-ops)
+  - Layout uses modern-classic styling, generous spacing, subtle motion
+
+---
+
+PART 2: TENANT CO-OP LANDING PAGE
+Route: /t/{tenantSlug}
+Audience: Prospective families/instructors for that co-op
+
+Content:
+- Co-op logo (uploaded or AI placeholder)
+- Header image (uploaded or AI fallback)
+- Co-op name
+- “About Us” section (rich text)
+- “Pricing & Membership Info” (optional section)
+- Public class list (if enabled)
+- Public event list (if enabled)
+- CTA: “Apply to Join”
+- CTA: “Log In” (for existing members)
+- Footer with “Powered by Bramble”
+
+Landing Page Editor (Tenant Admin):
+- Located in Admin Dashboard → “Landing Page”
+- Editor tools:
+  - Select layout from 3 templates
+  - Upload logo and header image
+  - Edit about and pricing sections
+  - Toggle class/event visibility
+  - Preview changes
+  - Save with confirmation
+- Placeholder content if empty
+- Store data in `tenant_landing_pages` (create if needed)
+- Use existing `tenant_branding` fields for style defaults
+
+Bramble Console:
+- Route: /platform/tenants/{id}
+- Show “Preview Landing Page” button linking to /t/{tenantSlug}
+- Read-only view
+
+---
+
+TECH
+- Use REST, existing middleware, Zod validation
+- AI image logic: fallback to calm stock photography based on tenant name/context
+- Form-based editors only (no raw HTML)
+
+⛔ DO NOT:
+- Add custom domains
+- Build full WYSIWYG or CMS
+- Allow open HTML editing

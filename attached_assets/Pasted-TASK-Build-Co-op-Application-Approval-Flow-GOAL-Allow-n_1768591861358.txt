@@ -1,0 +1,136 @@
+TASK: Build Co-op Application & Approval Flow
+
+GOAL:
+Allow new homeschool co-ops to apply to use the platform.
+Applications are reviewed and approved by a Bramble operator.
+On approval, a new tenant (co-op) and admin user are auto-created.
+
+--------------------------------------------------
+PAGES / COMPONENTS TO BUILD
+--------------------------------------------------
+
+1) Public Co-op Application Form
+Path: /start OR /apply
+
+Purpose:
+- Public entry point for starting a new co-op
+- No login required
+
+Fields:
+- coopName (required)
+- location (city, state)
+- description
+- estimatedSize
+- applicantName (required)
+- applicantEmail (required)
+- applicantPhone (optional)
+- whyStartingCoop (optional)
+- logoUpload (optional)
+
+Behavior:
+- Soft validation: warn if similar coopName or applicantEmail already exists
+- Submit creates a CoopApplication record
+- Show confirmation screen after submit
+- Send "Application Received" email
+
+--------------------------------------------------
+
+2) Operator Application Queue
+Path: /operator/applications
+
+Purpose:
+- View and manage all co-op applications
+
+Features:
+- List view with filters: pending | approved | denied
+- Show submitted date, coopName, applicantName, status
+- Click row to open review page
+
+--------------------------------------------------
+
+3) Application Review Page
+Path: /operator/applications/:id
+
+Purpose:
+- Full application detail view
+- Approve or deny applications
+
+Features:
+- Display all submitted fields
+- Operator notes field
+- Approve button
+- Deny button
+- Record reviewedAt and reviewedBy
+
+--------------------------------------------------
+
+4) Auto-Tenant Creation (On Approval)
+
+On Approve:
+- Create new Tenant using application data
+- Create User with applicantEmail
+- Assign COOP_ADMIN role
+- Link user to tenant
+- Send approval email with magic login link
+
+On Deny:
+- Update status to "denied"
+- Send denial email (no account created)
+
+--------------------------------------------------
+
+5) Authentication (Magic Link)
+
+- Do NOT generate temporary passwords
+- Send one-time magic login link on approval
+- On first login:
+  - User sets password
+  - Redirect to co-op setup dashboard
+
+--------------------------------------------------
+EMAIL TEMPLATES
+--------------------------------------------------
+
+- Application Received
+- Application Approved (includes magic login link)
+- Application Denied
+- Reminder: Co-op setup not started (after 7 days)
+
+--------------------------------------------------
+DATA MODEL
+--------------------------------------------------
+
+CoopApplication:
+- id
+- status: "pending" | "approved" | "denied"
+- coopName
+- location
+- description
+- estimatedSize
+- applicantName
+- applicantEmail
+- applicantPhone
+- whyStartingCoop
+- createdAt
+- reviewedAt
+- reviewedBy
+- operatorNotes
+- createdTenantId
+
+--------------------------------------------------
+OPTIONAL UX ENHANCEMENTS
+--------------------------------------------------
+
+- Email reminder if approved admin has not logged in after 7 days
+- Allow logo upload during application to seed branding
+- Show application age (e.g. "Submitted 3 days ago") in operator queue
+
+--------------------------------------------------
+SUCCESS CRITERIA
+--------------------------------------------------
+
+- Applicant can apply without friction
+- Operator has full visibility and control
+- No duplicate or spam applications
+- Approved co-ops can log in and start setup immediately
+- Flow feels calm, intentional, and trust-first

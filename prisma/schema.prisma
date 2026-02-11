@@ -1,0 +1,761 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  BRAMBLE_OPERATOR
+  COOP_ADMIN
+  INSTRUCTOR
+  FAMILY
+}
+
+enum RegistrationStatus {
+  PENDING
+  APPROVED
+  WAITLISTED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+  REFUNDED
+}
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
+}
+
+enum EmailStatus {
+  QUEUED
+  SENT
+  DELIVERED
+  OPENED
+  CLICKED
+  BOUNCED
+  FAILED
+}
+
+model Tenant {
+  id               String   @id @default(cuid())
+  name             String
+  slug             String   @unique
+  status           String   @default("Active")
+  directoryVisible Boolean  @default(true)
+  contactEmail     String
+  stripeAccountId  String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  users              User[]
+  classes            Class[]
+  courses            Course[]
+  offerings          Offering[]
+  events             Event[]
+  registrations      Registration[]
+  payments           Payment[]
+  ledgerEntries      LedgerEntry[]
+  payouts            Payout[]
+  chats              Chat[]
+  auditLogs          AuditLog[]
+  emailLogs          EmailLog[]
+  targetedMessages   TargetedMessage[]
+  audienceSegments   AudienceSegment[]
+  branding           TenantBranding?
+  landingPage        TenantLandingPage?
+  announcements      Announcement[]
+  newsletters        Newsletter[]
+  tenantFeeRules     TenantFeeRule[]
+  emailAutomations   EmailAutomation[]
+  localProviders     LocalProvider[]
+
+  @@index([slug])
+  @@index([status])
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  passwordHash   String
+  firstName      String
+  lastName       String
+  role           UserRole
+  secondaryRoles String[] @default([])
+  tenantId       String?
+  isActive       Boolean  @default(true)
+  isArchived     Boolean  @default(false)
+  applicationStatus ApplicationStatus @default(APPROVED)
+  bio            String?
+  phone          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  tenant             Tenant?            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  children           Child[]
+  instructedClasses  Class[]
+  instructedOfferings Offering[]        @relation("InstructedOfferings")
+  registrations      Registration[]
+  payments           Payment[]
+  chatMessages       ChatMessage[]
+  auditLogs          AuditLog[]
+  proposedEvents     Event[]            @relation("ProposedEvents")
+  localProviderListings LocalProvider[]
+
+  @@index([email])
+  @@index([tenantId])
+  @@index([role])
+  @@index([applicationStatus])
+}
+
+model Child {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String?
+  dateOfBirth DateTime?
+  grade     String?
+  parentId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Interests - stored as array of strings
+  interests String[] @default([])
+
+  // Learning Styles
+  learningStylePrimary   String?
+  learningStyleSecondary String?
+
+  // Educational Philosophies
+  educationalPhilosophyPrimary   String?
+  educationalPhilosophySecondary String?
+
+  // Support & Notes
+  preferredLearningEnvironment String?
+  neurodivergentNotes          String?
+  healthNotes                  String?
+  parentNotes                  String?
+
+  // Privacy Settings
+  shareWithInstructors  Boolean @default(true)
+  visibleToOtherParents Boolean @default(false)
+
+  parent        User           @relation(fields: [parentId], references: [id], onDelete: Cascade)
+  registrations Registration[]
+
+  @@index([parentId])
+}
+
+model Class {
+  id            String   @id @default(cuid())
+  tenantId      String
+  instructorId  String?
+  title         String
+  description   String?
+  price         Float
+  capacity      Int
+  status        String   @default("Draft")
+  isArchived    Boolean  @default(false)
+  imageUrl      String?
+  materialsUrl  String?
+  ageMin        Int?
+  ageMax        Int?
+  gradeMin      String?
+  gradeMax      String?
+  prerequisites String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  instructor    User?          @relation(fields: [instructorId], references: [id])
+  sessions      ClassSession[]
+  registrations Registration[]
+  chats         Chat[]
+
+  @@index([tenantId])
+  @@index([instructorId])
+  @@index([status])
+}
+
+model ClassSession {
+  id              String   @id @default(cuid())
+  classId         String
+  date            DateTime
+  startTime       String
+  endTime         String
+  location        String?
+  locationDetails String?
+  createdAt       DateTime @default(now())
+
+  class Class         @relation(fields: [classId], references: [id], onDelete: Cascade)
+  notes SessionNote[]
+
+  @@index([classId])
+}
+
+model SessionNote {
+  id           String   @id @default(cuid())
+  sessionId    String
+  instructorId String
+  content      String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  session ClassSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, instructorId])
+  @@index([sessionId])
+  @@index([instructorId])
+}
+
+model Event {
+  id              String   @id @default(cuid())
+  tenantId        String
+  title           String
+  description     String?
+  date            DateTime
+  endDate         DateTime?
+  location        String?
+  locationDetails String?
+  price           Float
+  capacity        Int?
+  status          String   @default("Draft")
+  imageUrl        String?
+  isFree          Boolean  @default(false)
+  attendeeUnit    String   @default("Person")
+  proposedById    String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tenant        Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  proposedBy    User?          @relation("ProposedEvents", fields: [proposedById], references: [id])
+  registrations Registration[]
+
+  @@index([tenantId])
+  @@index([status])
+}
+
+// NEW COURSE SYSTEM - Course → Offering → OfferingClass hierarchy
+// Course is the reusable template (e.g., "Welding")
+model Course {
+  id            String   @id @default(cuid())
+  tenantId      String
+  title         String
+  description   String?
+  prerequisites String?  // "Prerequisites and Notes" - renamed from prerequisites
+  ageMin        Int?
+  ageMax        Int?
+  imageUrl      String?
+  isArchived    Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant    Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  offerings Offering[]
+
+  @@index([tenantId])
+}
+
+// Offering is a specific run of a Course (e.g., "Fall Welding 2026")
+model Offering {
+  id           String   @id @default(cuid())
+  tenantId     String
+  courseId     String
+  instructorId String?
+  seasonLabel  String?  // e.g., "Fall 2026", "Spring 2027"
+  price        Float
+  capacity     Int
+  status       String   @default("Draft")  // Draft, Pending Approval, Published, Archived
+  isArchived   Boolean  @default(false)
+  materialsUrl String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tenant        Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  course        Course              @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  instructor    User?               @relation("InstructedOfferings", fields: [instructorId], references: [id])
+  classes       OfferingClass[]
+  registrations OfferingRegistration[]
+  chats         OfferingChat[]
+
+  @@index([tenantId])
+  @@index([courseId])
+  @@index([instructorId])
+  @@index([status])
+}
+
+// OfferingClass is one individual meeting within an Offering
+model OfferingClass {
+  id              String   @id @default(cuid())
+  offeringId      String
+  date            DateTime
+  startTime       String
+  endTime         String
+  location        String?
+  locationDetails String?
+  isCancelled     Boolean  @default(false)
+  isOneOff        Boolean  @default(false)
+  createdAt       DateTime @default(now())
+
+  offering Offering            @relation(fields: [offeringId], references: [id], onDelete: Cascade)
+  notes    OfferingClassNote[]
+
+  @@index([offeringId])
+}
+
+// Notes for individual classes
+model OfferingClassNote {
+  id             String   @id @default(cuid())
+  offeringClassId String
+  instructorId   String
+  content        String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  offeringClass OfferingClass @relation(fields: [offeringClassId], references: [id], onDelete: Cascade)
+
+  @@unique([offeringClassId, instructorId])
+  @@index([offeringClassId])
+  @@index([instructorId])
+}
+
+// Registration for new Offering system
+model OfferingRegistration {
+  id         String             @id @default(cuid())
+  tenantId   String
+  userId     String
+  childId    String?
+  offeringId String
+  status     RegistrationStatus @default(PENDING)
+  paymentId  String?            @unique
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  offering Offering @relation(fields: [offeringId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([offeringId])
+  @@index([status])
+}
+
+// Chat for new Offering system
+model OfferingChat {
+  id         String   @id @default(cuid())
+  offeringId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  offering Offering             @relation(fields: [offeringId], references: [id], onDelete: Cascade)
+  messages OfferingChatMessage[]
+
+  @@index([offeringId])
+}
+
+model OfferingChatMessage {
+  id        String   @id @default(cuid())
+  chatId    String
+  senderId  String
+  content   String
+  createdAt DateTime @default(now())
+
+  chat OfferingChat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+
+  @@index([chatId])
+  @@index([senderId])
+}
+
+model Registration {
+  id        String             @id @default(cuid())
+  tenantId  String
+  userId    String
+  childId   String?
+  classId   String?
+  eventId   String?
+  status    RegistrationStatus @default(PENDING)
+  paymentId String?            @unique
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  tenant  Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  child   Child?   @relation(fields: [childId], references: [id], onDelete: Cascade)
+  class   Class?   @relation(fields: [classId], references: [id], onDelete: Cascade)
+  event   Event?   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  payment Payment? @relation(fields: [paymentId], references: [id])
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([status])
+}
+
+model Payment {
+  id                 String        @id @default(cuid())
+  tenantId           String
+  userId             String
+  stripePaymentIntentId String?    @unique
+  amount             Float
+  status             PaymentStatus @default(PENDING)
+  description        String?
+  metadata           Json?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  tenant         Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user           User          @relation(fields: [userId], references: [id])
+  registration   Registration?
+  ledgerEntries  LedgerEntry[]
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([status])
+}
+
+model LedgerEntry {
+  id          String   @id @default(cuid())
+  tenantId    String
+  paymentId   String
+  entityType  String
+  entityId    String?
+  amount      Float
+  description String
+  createdAt   DateTime @default(now())
+
+  tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  payment Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([paymentId])
+  @@index([entityType])
+}
+
+model Payout {
+  id            String       @id @default(cuid())
+  tenantId      String?
+  entityType    String
+  entityId      String
+  amount        Float
+  status        PayoutStatus @default(PENDING)
+  stripeTransferId String?
+  scheduledFor  DateTime
+  paidAt        DateTime?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([status])
+  @@index([entityType])
+}
+
+model FeeRule {
+  id            String   @id @default(cuid())
+  type          String
+  value         String
+  effectiveDate DateTime
+  status        String   @default("Active")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([type])
+  @@index([status])
+}
+
+model EmailTemplate {
+  id          String   @id @default(cuid())
+  tenantId    String?
+  key         String   @unique
+  name        String
+  subject     String
+  htmlContent String
+  textContent String?
+  isGlobal    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([key])
+  @@index([isGlobal])
+}
+
+model EmailLog {
+  id          String      @id @default(cuid())
+  tenantId    String?
+  recipientEmail String
+  subject     String
+  templateKey String?
+  status      EmailStatus @default(QUEUED)
+  sentAt      DateTime?
+  deliveredAt DateTime?
+  openedAt    DateTime?
+  errorMessage String?
+  metadata    Json?
+  createdAt   DateTime    @default(now())
+
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([status])
+  @@index([recipientEmail])
+}
+
+model EmailAutomation {
+  id        String   @id @default(cuid())
+  tenantId  String?
+  name      String
+  trigger   String
+  status    String   @default("Draft")
+  steps     Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([status])
+}
+
+model TargetedMessage {
+  id        String   @id @default(cuid())
+  tenantId  String?
+  subject   String
+  body      String
+  segment   String
+  sentBy    String
+  sentAt    DateTime @default(now())
+
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+}
+
+model AudienceSegment {
+  id        String   @id @default(cuid())
+  tenantId  String?
+  name      String
+  criteria  Json
+  createdAt DateTime @default(now())
+
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+}
+
+model Chat {
+  id        String   @id @default(cuid())
+  tenantId  String
+  classId   String?
+  name      String
+  isGeneral Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  tenant   Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  class    Class?        @relation(fields: [classId], references: [id], onDelete: Cascade)
+  messages ChatMessage[]
+
+  @@index([tenantId])
+  @@index([classId])
+}
+
+model ChatMessage {
+  id         String   @id @default(cuid())
+  chatId     String
+  userId     String
+  content    String
+  senderRole String?
+  createdAt  DateTime @default(now())
+
+  chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([chatId])
+  @@index([userId])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  tenantId  String?
+  userId    String?
+  action    String
+  details   String
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+model TenantBranding {
+  id           String   @id @default(cuid())
+  tenantId     String   @unique
+  logoUrl      String?
+  primaryColor String   @default("#1e293b")
+  secondaryColor String @default("#64748b")
+  accentColor  String   @default("#0ea5e9")
+  fontFamily   String   @default("Inter")
+  customDomain String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+}
+
+enum LandingPageLayout {
+  CLASSIC
+  MODERN
+  MINIMAL
+}
+
+model TenantLandingPage {
+  id               String            @id @default(cuid())
+  tenantId         String            @unique
+  layoutTemplate   LandingPageLayout @default(CLASSIC)
+  headerImageUrl   String?
+  headerImageTheme String?
+  aboutContent     String?
+  pricingContent   String?
+  showPublicClasses Boolean          @default(true)
+  showPublicEvents  Boolean          @default(true)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  tenantId  String
+  title     String
+  content   String
+  priority  String   @default("Normal")
+  isActive  Boolean  @default(true)
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([isActive])
+}
+
+enum NewsletterStatus {
+  DRAFT
+  SCHEDULED
+  SENT
+  ARCHIVED
+}
+
+model Newsletter {
+  id          String           @id @default(cuid())
+  tenantId    String
+  subject     String
+  content     String
+  status      NewsletterStatus @default(DRAFT)
+  scheduledAt DateTime?
+  sentAt      DateTime?
+  createdBy   String
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([status])
+}
+
+model TenantFeeRule {
+  id            String   @id @default(cuid())
+  tenantId      String
+  type          String
+  value         String
+  description   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([type])
+}
+
+enum CoopApplicationStatus {
+  PENDING
+  APPROVED
+  DENIED
+}
+
+model CoopApplication {
+  id               String                @id @default(cuid())
+  status           CoopApplicationStatus @default(PENDING)
+  coopName         String
+  location         String?
+  description      String?
+  estimatedSize    String?
+  applicantName    String
+  applicantEmail   String
+  applicantPhone   String?
+  whyStartingCoop  String?
+  operatorNotes    String?
+  reviewedAt       DateTime?
+  reviewedBy       String?
+  createdTenantId  String?
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+
+  @@index([status])
+  @@index([applicantEmail])
+}
+
+model MagicLink {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  email     String
+  userId    String?
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([token])
+  @@index([email])
+}
+
+model LocalProvider {
+  id           String   @id @default(cuid())
+  tenantId     String
+  name         String
+  website      String?
+  description  String?
+  category     String
+  contactEmail String?
+  contactPhone String?
+  isApproved   Boolean  @default(true)
+  isAutoListed Boolean  @default(false)
+  linkedUserId String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tenant     Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  linkedUser User?  @relation(fields: [linkedUserId], references: [id])
+
+  @@index([tenantId])
+  @@index([category])
+  @@index([linkedUserId])
+}

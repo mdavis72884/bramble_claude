@@ -1,0 +1,192 @@
+## Prompt: Bramble App Fixes and Feature Enhancements (Updated)
+
+This prompt is a complete task instruction to finish integration, resolve bugs, and finalize role-based workflows for Bramble. Perform a full feature pass and system audit. The focus is **not to build new features**, but to properly connect, complete, and secure what is already designed.
+
+🚫 **DO NOT:**
+
+* Remove all mock/demo content. Keep where appropriate for visual/demo use.
+* Enable real email or Stripe payment.
+* Add anything outside this list unless explicitly specified.
+
+---
+
+### Section 1: 🧩 Role System
+
+✅ Every user with multiple roles needs a **Role Switcher UI** (dropdown or tab).
+✅ Co-op Admins must be able to **assign roles** to existing users (e.g., make Instructor a Family member).
+✅ Platform Admin (Bramble) must have:
+
+* Global **read-only** access to all tenants
+* **Impersonation tool** to view the app as any user (no edits unless impersonating)
+
+---
+
+### Section 2: 👤 User Management
+
+✅ Co-op Admins must be able to:
+
+* **Create** a Family or Instructor account (auto-sends account credentials email)
+* **Invite** a Family or Instructor (auto-sends signup link via email)
+
+✅ Bramble Operator must be able to:
+
+* Create or invite new **tenants/co-ops** via the same flow
+
+✅ Distinction must be enforced:
+
+* "Create" = admin generates login credentials
+* "Invite" = user creates their account
+
+✅ Each flow must have a corresponding **automated email template**.
+
+---
+
+### Section 3: 🧑‍🏫 Instructor UX
+
+✅ Instructor Dashboard must include:
+
+* Payouts (real data)
+* Calendar (real data)
+* Messages (class chats, if applicable)
+* Roster and sessions/notes must be **usable and editable**
+* Instructors must NOT be kicked to unrelated screens while navigating
+
+✅ Messaging:
+
+* Instructors should be able to **message families** of enrolled students
+* Admins control whether families can reply or it's one-way only
+
+✅ Instructors should be able to:
+
+* Create class drafts and submit for admin approval
+* Edit limited fields (capacity, time/date = triggers re-approval)
+
+---
+
+### Section 4: 📊 Test Data
+
+✅ Seed script must create working test users:
+
+* 2 Operators, 2 Admins, 2 Instructors, 2 Families (each with 2 kids)
+  ✅ Add sample payments and class enrollments so receipts can be tested
+
+---
+
+### Section 5: 🔐 Security
+
+✅ Tenant isolation must remain intact — Co-op Admins only manage their own data
+✅ Bramble Operators can view everything but cannot edit unless impersonating
+✅ Add safeguards for destructive actions:
+
+* Confirmations before delete
+* Soft-delete or archive logic
+* Log all sensitive actions
+
+---
+
+### Section 6: 📦 Starter Pack vs Demo Pack Clarification
+
+✅ These are two **separate systems**:
+
+* **Starter Pack**
+
+  * Applied to new tenants upon creation
+  * Includes templates: resources, emails, classes, events
+  * Managed by Bramble for all future tenants
+  * Becomes editable by the tenant after activation
+
+* **Demo Pack**
+
+  * Visual-only filler content (non-functional)
+  * Exists to help users visualize the system layout
+  * Auto-removed once real content is added or account is activated
+
+---
+
+### Section 7: System Integration Tasks
+
+✅ Replace all mock data with live API data, except where filler/demo is useful.
+✅ Ensure all dashboard metrics and workflows pull from real endpoints.
+✅ Ensure forms save correctly. Fix any known broken buttons, flows, or links.
+
+---
+
+### Section 8: Communications Hub
+
+✅ Rebuild the hub to manage:
+
+* Newsletters (3 layout styles)
+* Targeted messages
+* Email automations (trigger-based)
+
+✅ Automations should use readable trigger/action language (non-code)
+✅ Add admin chat management interface
+
+* Admins can view/manage all chats
+* Allow class chats, co-op chat, instructor chat
+* Global chat = families + instructors (optional)
+* Event chats = off by default, manual toggle only
+
+---
+
+### Section 9: Calendar Improvements
+
+✅ Calendar access:
+
+* Co-op Admin: full view
+* Instructor: read-only view
+* Family: personalized view
+
+✅ Make items clickable
+✅ "+X More" overflow fix
+✅ Optional daily/weekly toggle if simple
+
+---
+
+### Section 10: Email System
+
+✅ Implement basic **1-way email system** (non-API, local SMTP or simulated)
+✅ Emails triggered by:
+
+* Invite sent
+* Account created
+* Enrollment confirmed
+* RSVP confirmed
+
+✅ Email logs accessible to admin
+✅ Bramble and Co-ops have separate email systems
+
+---
+
+### Section 11: Payments & Receipts
+
+✅ Enrollment requires payment (unless class/event is free)
+✅ Receipt must include:
+
+* Class title
+* Child name
+* Parent name
+* Amount
+* Date
+  ✅ Must be downloadable/printable in homeschool-friendly format
+
+✅ Admin/instructor views:
+
+* Filter by class, date, family
+* Show fees, payouts, balances
+
+---
+
+### Section 12: Miscellaneous
+
+✅ Role assignment, calendar UX, messaging logic, soft-deletes, notification badges, dashboard click-throughs, test user fix, real class enrollments must all be confirmed.
+✅ Review UI for missing elements: no empty screens, make dashboards useful
+✅ Keep UI consistent with Bramble’s tone and visual style
+
+---
+
+✅ Final Output:
+
+* Return a list of what was fixed, what remains incomplete
+* Do not enable Stripe or email sending APIs
+* Do not build new features not described above
